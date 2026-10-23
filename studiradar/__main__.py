@@ -1,6 +1,7 @@
 """Kommandozeile: python -m studiradar <befehl>
 
   serve                 Webserver + Zeitplan starten (Standard)
+  demo                  App mit Beispieldaten ansehen (ohne Zugangsdaten)
   sync ilias|ical|klips Einmal abrufen und Ergebnis anzeigen
   login ilias           Nur den ILIAS-Login testen
   push-test             Test-Benachrichtigung an alle Geräte
@@ -22,16 +23,23 @@ from .config import load_config
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="studiradar", description="Uni-Radar für ILIAS & KLIPS")
     parser.add_argument("command", nargs="?", default="serve",
-                        choices=["serve", "sync", "login", "push-test", "digest", "list", "init"])
+                        choices=["serve", "demo", "sync", "login", "push-test", "digest", "list", "init"])
     parser.add_argument("target", nargs="?", default="")
     parser.add_argument("-c", "--config", default=None, help="Pfad zu config.toml")
     parser.add_argument("--debug", action="store_true", help="HTML-Seiten zur Fehlersuche speichern")
+    parser.add_argument("--port", type=int, default=8080, help="Port für den Demo-Modus")
     args = parser.parse_args(argv)
 
     logging.basicConfig(
         level=logging.DEBUG if args.debug else logging.INFO,
         format="%(asctime)s %(levelname)s %(name)s: %(message)s",
     )
+
+    if args.command == "demo":
+        from .demo import run_demo
+
+        run_demo(port=args.port)
+        return 0
 
     if args.command == "init":
         target = Path(args.config or "config.toml")

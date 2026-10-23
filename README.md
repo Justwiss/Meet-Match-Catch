@@ -42,6 +42,31 @@ ILIAS ist laut ITCC nicht durch Duo geschützt und läuft deshalb voll automatis
 
 ---
 
+## Am PC ausprobieren (ohne Pi)
+
+**Voraussetzung:** Python 3.11 oder neuer ([python.org](https://www.python.org/downloads/),
+unter Windows beim Installieren den Haken bei **„Add python.exe to PATH“** setzen).
+
+1. Code herunterladen: auf GitHub **Code → Download ZIP**, entpacken (oder `git clone`).
+2. **Windows:** `start-demo.bat` doppelklicken. **Mac:** `start-demo.command` doppelklicken
+   (beim ersten Mal ggf. Rechtsklick → Öffnen).
+3. Der Browser öffnet `http://localhost:8080` – Passwort **`demo`**.
+
+Die Demo zeigt Beispieldaten und ruft nichts bei der Uni ab.
+
+**Mit deinem echten ILIAS am PC testen:** `config.example.toml` nach `config.toml` kopieren,
+`[app] password` und `[ilias] username/password` eintragen, dann im Ordner:
+
+```bash
+# Windows: .venv\Scripts\python   ·   Mac/Linux: .venv/bin/python
+.venv\Scripts\python -m studiradar login ilias   # Login testen, zeigt deine Kurse
+.venv\Scripts\python -m studiradar serve         # App starten → http://localhost:8080
+```
+
+Push-Benachrichtigungen funktionieren am PC in Chrome/Edge auch über `localhost`.
+
+---
+
 ## Installation auf dem Raspberry Pi 3B+
 
 Empfohlen: **Raspberry Pi OS (64-bit) Lite**. Prüfen mit `uname -m` → `aarch64`.
