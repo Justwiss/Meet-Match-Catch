@@ -1,0 +1,2 @@
+# Nur nötig, wenn KLIPS aktiviert ist (Headless-Chromium für den Duo-Login)
+playwright>=1.44

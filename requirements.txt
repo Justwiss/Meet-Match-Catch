@@ -1,0 +1,9 @@
+fastapi>=0.110
+uvicorn>=0.29
+requests>=2.31
+beautifulsoup4>=4.12
+icalendar>=5.0
+python-dateutil>=2.8
+pywebpush>=2.0
+itsdangerous>=2.1
+tzdata

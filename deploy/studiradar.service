@@ -1,0 +1,19 @@
+[Unit]
+Description=StudiRadar – ILIAS/KLIPS-Überblick
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=__USER__
+WorkingDirectory=__DIR__
+ExecStart=__DIR__/.venv/bin/python -m studiradar serve -c __DIR__/config.toml
+Restart=on-failure
+RestartSec=10
+Environment=PYTHONUNBUFFERED=1
+# Chromium für KLIPS darf den Pi nicht lahmlegen
+MemoryMax=700M
+Nice=5
+
+[Install]
+WantedBy=multi-user.target

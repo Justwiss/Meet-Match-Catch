@@ -1,0 +1,75 @@
+# StudiRadar – Konfiguration
+# Kopiere diese Datei nach config.toml und trage deine Daten ein.
+# WICHTIG: config.toml enthält Passwörter → nie committen, Rechte: chmod 600 config.toml
+
+[app]
+# Passwort für die App (Login auf dem Handy). Bitte ein eigenes, langes wählen!
+password = ""
+data_dir = "data"
+# 127.0.0.1 = nur über Tailscale (empfohlen). 0.0.0.0 = auch im Heimnetz per http erreichbar (dort aber ohne Push).
+host = "127.0.0.1"
+port = 8080
+# Kontaktadresse für die Push-Dienste (Pflichtangabe bei Web Push, wird nicht veröffentlicht)
+contact_email = "mailto:deine.adresse@smail.uni-koeln.de"
+
+[ilias]
+enabled = true
+base_url = "https://www.ilias.uni-koeln.de/ilias"
+client_id = "uk"
+# Dein Uni-Account (wie beim ILIAS-Login)
+username = ""
+password = ""
+# "auto" = erst normales ILIAS-Formular, dann Shibboleth. Alternativ "local" oder "shibboleth".
+login_method = "auto"
+# Wie oft ILIAS durchsucht wird (Minuten, mindestens 15)
+interval_minutes = 60
+# Wie tief in Ordner/Sitzungen hineingeschaut wird
+max_depth = 3
+# Übungen öffnen, um Abgabetermine auszulesen
+open_exercises = true
+# Kurse, die ignoriert werden sollen (Teil des Namens reicht)
+exclude_courses = []
+
+# EMPFOHLEN: Kalender-Abo aus ILIAS. Enthält Übungsfristen, Tests, Sitzungen aller Kurse.
+# ILIAS → Dashboard → Kalender → "Abonnieren"/"Export" → Link kopieren.
+ical_url = ""
+
+# Optional: privater ILIAS-Neuigkeiten-Feed
+# ILIAS → Persönliche Einstellungen → Neuigkeiten → privaten Feed aktivieren + Feed-Passwort setzen
+news_feed_url = ""
+news_feed_password = ""
+
+[klips]
+# KLIPS braucht eine Duo-Bestätigung. Dafür wird Chromium/Playwright benötigt (siehe README).
+enabled = false
+username = ""
+password = ""
+# EMPFOHLEN: Kalender-Abo aus KLIPS (Stundenplan, Prüfungstermine) – funktioniert ohne Duo.
+# KLIPS → Visitenkarte → Kalender → Abonnieren → Link kopieren.
+ical_url = ""
+# Zu diesen Zeiten wird ein stiller Abruf versucht (klappt, solange Duo den Pi noch "merkt").
+auto_times = ["08:00", "18:00"]
+# Auf dem Raspberry Pi das System-Chromium verwenden:
+chromium_path = "/usr/bin/chromium"
+headless = true
+duo_timeout_seconds = 120
+
+# Seiten, die nach dem Login gelesen und verglichen werden. Falls ein Link nicht passt:
+# in KLIPS die Seite öffnen, Adresse aus der Adresszeile kopieren und hier eintragen.
+[klips.pages]
+"Noten" = "https://klips2.uni-koeln.de/co/ee/ui/ca2/app/desktop/#/slc.xm.ac/achievements"
+"Prüfungen" = "https://klips2.uni-koeln.de/co/ee/ui/ca2/app/desktop/#/slc.xm.exr/exams"
+
+[notify]
+# Erinnerungen vor Fristen (Stunden vorher)
+reminders_hours = [72, 24, 3]
+# Tägliche Zusammenfassung
+digest_time = "07:30"
+# Ruhezeit: keine Push-Nachrichten (außer Duo-Codes); wird danach gesammelt nachgeliefert
+quiet_start = "23:00"
+quiet_end = "07:00"
+
+# Beliebig viele weitere Kalender-Abos (z.B. Fachschaft, Google-Kalender, Mensa-Events)
+# [[ical]]
+# name = "Fachschaft"
+# url = "https://..."

@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>StudiRadar</title>
+  <meta name="theme-color" content="#3b4fd8" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#11131a" media="(prefers-color-scheme: dark)">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="StudiRadar">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/static/icons/icon-192.png">
+  <link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <!-- Anmeldung -->
+  <section id="login" class="login" hidden>
+    <form id="login-form" class="login-card">
+      <img src="/static/icons/icon-192.png" alt="" width="72" height="72">
+      <h1>StudiRadar</h1>
+      <p class="muted">Dein Überblick über ILIAS, KLIPS &amp; eigene Aufgaben.</p>
+      <input id="login-pw" type="password" placeholder="Passwort" autocomplete="current-password" required>
+      <button class="btn primary" type="submit">Anmelden</button>
+      <p id="login-err" class="error" hidden></p>
+    </form>
+  </section>
+
+  <!-- App -->
+  <div id="app" hidden>
+    <header class="topbar">
+      <h1 id="view-title">Übersicht</h1>
+      <button id="refresh" class="icon-btn" aria-label="Aktualisieren" title="Jetzt abrufen">
+        <svg viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M17.65 6.35A7.95 7.95 0 0 0 12 4a8 8 0 1 0 7.75 10h-2.08A6 6 0 1 1 12 6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+      </button>
+    </header>
+
+    <main id="main">
+      <!-- Übersicht -->
+      <section id="view-home" class="view">
+        <div id="push-banner" class="banner" hidden>
+          <div>
+            <strong>Benachrichtigungen aktivieren</strong>
+            <p id="push-banner-text">Damit du neue Dateien und Fristen sofort aufs Handy bekommst.</p>
+          </div>
+          <button id="push-enable" class="btn primary small">Aktivieren</button>
+        </div>
+        <div id="klips-card-home"></div>
+        <div class="card">
+          <div class="card-head"><h2>Nächste Fristen</h2><a href="#deadlines" class="link">Alle</a></div>
+          <ul id="home-deadlines" class="list"></ul>
+        </div>
+        <div class="card">
+          <div class="card-head"><h2>Neu für dich</h2><a href="#updates" class="link">Alle</a></div>
+          <ul id="home-new" class="list"></ul>
+        </div>
+        <div class="card">
+          <div class="card-head"><h2>Termine diese Woche</h2></div>
+          <ul id="home-events" class="list"></ul>
+        </div>
+        <p id="home-sync" class="muted center small"></p>
+      </section>
+
+      <!-- Updates -->
+      <section id="view-updates" class="view" hidden>
+        <div class="toolbar">
+          <div class="chips" id="feed-filter">
+            <button class="chip active" data-f="all">Alle</button>
+            <button class="chip" data-f="unread">Ungelesen</button>
+            <button class="chip" data-f="file">Dateien</button>
+            <button class="chip" data-f="forum">Foren</button>
+            <button class="chip" data-f="klips">KLIPS</button>
+          </div>
+          <button id="seen-all" class="btn small ghost">Alle gelesen</button>
+        </div>
+        <div id="feed"></div>
+      </section>
+
+      <!-- Fristen & Aufgaben -->
+      <section id="view-deadlines" class="view" hidden>
+        <div class="toolbar">
+          <div class="chips" id="dl-filter">
+            <button class="chip active" data-f="all">Alle</button>
+            <button class="chip" data-f="uni">Uni</button>
+            <button class="chip" data-f="manual">Eigene</button>
+          </div>
+          <label class="toggle small"><input type="checkbox" id="show-done"> Erledigte</label>
+        </div>
+        <div id="deadlines"></div>
+      </section>
+
+      <!-- Mehr -->
+      <section id="view-more" class="view" hidden>
+        <div class="card" id="klips-card"></div>
+        <div class="card">
+          <div class="card-head"><h2>Abrufe</h2></div>
+          <ul id="sync-list" class="list"></ul>
+        </div>
+        <div class="card">
+          <div class="card-head"><h2>Benachrichtigungen</h2></div>
+          <p id="push-state" class="muted"></p>
+          <div class="row-btns">
+            <button id="push-enable-2" class="btn primary small">Aktivieren</button>
+            <button id="push-test" class="btn small">Test senden</button>
+            <button id="push-disable" class="btn small ghost">Deaktivieren</button>
+          </div>
+          <p class="muted small" id="ios-hint" hidden>
+            iPhone: Push geht nur, wenn StudiRadar über „Teilen → Zum Home-Bildschirm“ installiert ist (iOS 16.4+).
+          </p>
+        </div>
+        <div class="card">
+          <button id="logout" class="btn ghost full">Abmelden</button>
+        </div>
+      </section>
+    </main>
+
+    <button id="fab" class="fab" aria-label="Eintrag hinzufügen">+</button>
+
+    <nav class="tabbar">
+      <a href="#home" data-view="home">
+        <svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 3 2 12h3v8h6v-6h2v6h6v-8h3z"/></svg><span>Übersicht</span>
+      </a>
+      <a href="#updates" data-view="updates">
+        <svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 22a2 2 0 0 0 2-2h-4a2 2 0 0 0 2 2zm6-6V11c0-3.07-1.64-5.64-4.5-6.32V4a1.5 1.5 0 0 0-3 0v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1z"/></svg><span>Neu</span><b id="badge" class="badge" hidden></b>
+      </a>
+      <a href="#deadlines" data-view="deadlines">
+        <svg viewBox="0 0 24 24"><path fill="currentColor" d="M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 16H5V9h14zM7 11h5v5H7z"/></svg><span>Fristen</span>
+      </a>
+      <a href="#more" data-view="more">
+        <svg viewBox="0 0 24 24"><path fill="currentColor" d="M6 10a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm12 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-6 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg><span>Mehr</span>
+      </a>
+    </nav>
+  </div>
+
+  <!-- Eintrag hinzufügen / bearbeiten -->
+  <dialog id="task-dialog" class="sheet">
+    <form id="task-form" method="dialog">
+      <h2 id="task-dialog-title">Neuer Eintrag</h2>
+      <label>Was ist zu tun?<input name="title" required maxlength="300" placeholder="z.B. Hausarbeit Gliederung"></label>
+      <label>Fällig am (optional)<input name="due_at" type="datetime-local"></label>
+      <label>Kurs (optional)<input name="course" maxlength="120" list="course-list" placeholder="z.B. Wirtschaftsinformatik"></label>
+      <datalist id="course-list"></datalist>
+      <label>Notiz (optional)<textarea name="detail" rows="3" maxlength="2000"></textarea></label>
+      <div class="row-btns">
+        <button type="button" class="btn ghost" id="task-cancel">Abbrechen</button>
+        <button type="button" class="btn danger ghost" id="task-delete" hidden>Löschen</button>
+        <button type="submit" class="btn primary" value="save">Speichern</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" hidden></div>
+  <script src="/static/app.js" defer></script>
+</body>
+</html>
